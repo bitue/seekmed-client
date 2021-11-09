@@ -1,3 +1,4 @@
+import { SettingsSystemDaydreamTwoTone } from '@mui/icons-material';
 import { Button } from '@mui/material';
 import Backdrop from '@mui/material/Backdrop';
 import Box from '@mui/material/Box';
@@ -5,7 +6,8 @@ import Fade from '@mui/material/Fade';
 import Modal from '@mui/material/Modal';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import React from 'react';
+import React, { useContext, useState } from 'react';
+import { AuthContext } from '../../../Context/AuthProvider';
 
 
 
@@ -25,11 +27,39 @@ const BookingModal = ({ open, handleClose, name, time, date }) => {
     // const [open, setOpen] = React.useState(false);
     // const handleOpen = () => setOpen(true);
     // const handleClose = () => setOpen(false);
-    console.log(date)
+    const {user} = useContext(AuthContext)
+  
+    const initObject = {name:user.displayName, email:user.email, date:date.toDateString(), time:time }
+    const [data , setData] = useState(initObject)
+    const handleOnChange = e => {
+        const name = e.target.name;
+        const value = e.target.value;
+        const newObject ={...data}
+        newObject[name]=value;
+        setData(newObject);
+        console.log(data)
+
+    }
     const handleSubmit = e => {
-        alert('submitting')
-        // collecting the data 
-        // send data to mongoDb
+        alert('submitting');
+        console.log(data);
+
+        fetch('http://localhost:5000/appointment/insert',{
+            method:'POST',
+            headers:{
+                "content-type":"application/json"
+            },
+            body:JSON.stringify(data)
+
+
+        })
+        .then(res=> res.json())
+        .then(data => {
+            if(data.insertedId){
+                alert('successfully inserted');
+            }
+            console.log(data)
+        })
         handleClose()
         e.preventDefault()
     }
@@ -54,9 +84,11 @@ const BookingModal = ({ open, handleClose, name, time, date }) => {
                         <TextField
                             label="Your Name"
                             id="outlined-size-small"
-                            defaultValue="Your name"
+                            defaultValue={user.displayName}
                             size="small"
                             style={{ width: '90%', margin: '5px' }}
+                            name='name'
+                            onChange={handleOnChange}
                         />
                         <TextField
                             label="Appointment Time"
@@ -65,13 +97,16 @@ const BookingModal = ({ open, handleClose, name, time, date }) => {
 
                             size="small"
                             style={{ width: '90%', margin: '5px' }}
+                           
                         />
                         <TextField
                             label="Your Email"
                             id="outlined-size-small"
-                            defaultValue="Your Email"
+                            defaultValue={user.email}
                             size="small"
                             style={{ width: '90%', margin: '5px' }}
+                            name='email'
+                            onChange={handleOnChange}
                         />
                         <TextField
                             label="Date"
@@ -79,6 +114,7 @@ const BookingModal = ({ open, handleClose, name, time, date }) => {
                             value={date.toDateString()}
                             size="small"
                             style={{ width: '90%', margin: '5px' }}
+                         
                         />
 
                         <Button variant='contained' type='submit'>Submit</Button>
