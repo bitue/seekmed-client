@@ -31,7 +31,14 @@ const Navigation = () => {
                         </Typography>
                         <NavLink to='/appointment'>Appointment</NavLink>
                         {
-                            user?.email ? <Button onClick={logOut} variant='contained'>LogOut</Button> :<NavLink to='/login' >Login</NavLink>
+                            user?.email ? <Box>
+                                <NavLink to='/dashboard' >Dashboard</NavLink>
+
+                                
+                                <Button onClick={logOut} variant='contained'>LogOut</Button></Box> 
+                                :
+                                
+                                <NavLink to='/login' >Login</NavLink>
                         }
                     </Toolbar>
                 </AppBar>
