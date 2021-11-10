@@ -1,5 +1,5 @@
 import MenuIcon from '@mui/icons-material/Menu';
-import { Grid } from '@mui/material';
+
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -13,8 +13,7 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import PropTypes from 'prop-types';
 import * as React from 'react';
-import Calender from '../../Shared/Calender/Calender';
-import MyAppointment from '../MyAppointment/MyAppointment';
+
 
 const drawerWidth = 240;
 
@@ -25,6 +24,11 @@ function Dashboard(props) {
     const handleDrawerToggle = () => {
         setMobileOpen(!mobileOpen);
     };
+
+    const today = new Date();
+
+    const [date , setDate] = React.useState(today.toDateString())
+    console.log(date)
 
     const drawer = (
         <div>
@@ -37,6 +41,7 @@ function Dashboard(props) {
                         <ListItemText primary={text} />
                     </ListItem>
                 ))}
+                
             </List>
 
         </div>
@@ -106,17 +111,7 @@ function Dashboard(props) {
                 sx={{ flexGrow: 1, p: 3, width: { sm: `calc(100% - ${drawerWidth}px)` } }}
             >
                 <Toolbar />
-                <Grid container spacing={2}>
-                    <Grid item xs={12} md={6}>
-                       <Calender></Calender>
-
-                    </Grid>
-                    <Grid item xs={12} md={6}>
-                        <MyAppointment></MyAppointment>
-
-                    </Grid>
-
-                </Grid>
+                
 
             </Box>
         </Box>

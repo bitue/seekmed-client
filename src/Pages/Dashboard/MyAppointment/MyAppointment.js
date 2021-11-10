@@ -9,16 +9,21 @@ import React, { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../../../Context/AuthProvider';
 
 
-const MyAppointment = () => {
+const MyAppointment = ({dateApp}) => {
     const [appointment, setAppointment] = useState([])
     const { user } = useContext(AuthContext);
     const email = user?.email;
+    // console.log(dateApp.toDateString())
+    
 
 
     useEffect(() => {
         fetch(`http://localhost:5000/appointment/${email}`)
             .then(res => res.json())
             .then(data => {
+                // const remain = data.filter(ele=> ele.date === dateApp.toDateString())
+                // console.log(remain)
+                
                 setAppointment(data)
 
             })
